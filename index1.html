@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GPX Viewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        let map = L.map('map').setView([51.505, -0.126], 13);
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            id: 'mapbox/streets-v11',
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Load GPX files
+        let gpxFiles = [
+            '/tracks/track004.gpx',
+            '/tracks/track005.gpx',
+        ];
+
+        // Add GPX tracks to the map
+        for (let gpxFile of gpxFiles) {
+            let track = L.gpx(gpxFile).addTo(map);
+            track.bindTooltip('Track: ' + gpxFile);
+        }
+
+        // Set the map's extent to the bounds of all GPX tracks
+        let bounds = new L.Bounds();
+        for (let track of map.getLayers().filter(layer => layer instanceof L.GPX)) {
+            bounds.extend(track.getBounds());
+        }
+        map.fitBounds(bounds);
+    </script>
+</body>
+
+</html>
