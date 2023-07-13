@@ -25,7 +25,7 @@
 
         // Add GPX tracks to the map
         for (let gpxFile of gpxFiles) {
-            let track = L.gpx(gpxFile).addTo(map);
+            let track = L.GPX(gpxFile).addTo(map);
             track.bindTooltip('Track: ' + gpxFile);
         }
 
